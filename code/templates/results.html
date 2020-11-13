@@ -10,14 +10,24 @@
 </head>
 <body>
 
- <table>
-{% for res in results %}
-<tr>
-   <td class="c2">{{res.address}}</td>
-   <td class="c3">{{res.words_count}}</td>
-   <td class="c4"><span>{{res.http_status_code}}</span></td>
-</tr>
-{% endfor %}
+ <table  class="table">
+     <thead>
+    <tr>
+      <th scope="col">URL</th>
+      <th scope="col">Count</th>
+      <th scope="col">Status code</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for res in results %}
+    <tr>
+       <td class="c2">{{res.address}}</td>
+       <td class="c3">{{res.words_count}}</td>
+       <td class="c4"><span>{{res.http_status_code}}</span></td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 
 </body>

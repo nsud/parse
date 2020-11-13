@@ -23,15 +23,13 @@ def count_words(_id):
     address = task.address
     if not (address.startswith('http') and address.startswith('https')):
         address = 'http://' + address
-    with app.app_context():
-        res = requests.get(address)
-        words_count = 0
-        if res.ok:
-            words = res.text.split()
-            words_count = words.count("Python")
-        #http_status_code = res.status_code if res.status_code is not None else 400
-        result = Results(address=address, words_count=words_count, http_status_code=res.status_code)
-        task = Tasks.query.get(_id)
-        task.task_status = 'FINISHED'
-        db.session.add(result)
-        db.session.commit()
+    res = requests.get(address, timeout=TIMEOUT)
+    words_count = 0
+    if res.ok:
+        words = res.text.split()
+        words_count = words.count("Python")
+    result = Results(address=address, words_count=words_count, http_status_code=res.status_code)
+    task = Tasks.query.get(_id)
+    task.task_status = 'FINISHED'
+    db.session.add(result)
+    db.session.commit()
