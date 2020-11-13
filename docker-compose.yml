@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+
+  web:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+    - ./env:/opt/env/
+    ports:
+      - "8888:5000"
+
+
+  db:
+    restart: always
+    volumes:
+    - /tmp/:/tmp/
+    image: postgres
+    ports:
+    - 5432:5432
+
+
+  redis:
+    image: redis:5.0.7
+    ports:
+      - "6379:6379"
+
+  celery:
+    build: .
+    command: celery worker -A app.celery
+    depends_on:
+        - postgres
+        - redis
+
+
+env_file:
+  - .env
