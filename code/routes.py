@@ -4,9 +4,10 @@ from flask import jsonify, render_template, request, redirect, flash
 from app import db, celery, app
 from models import Results, Tasks
 from forms import WebsiteForm
+from worker import count_words
 
 
-@celery.task
+'''@celery.task
 def parse_website_text(_id):
     task = Tasks.query.get(_id)
     task.task_status = 'PENDING'
@@ -20,12 +21,12 @@ def parse_website_text(_id):
         if res.ok:
             words = res.text.split()
             words_count = words.count("Python")
-
+        http_status_code = res.status_code if res.status_code is not None else 400
         result = Results(address=address, words_count=words_count, http_status_code=res.status_code)
         task = Tasks.query.get(_id)
         task.task_status = 'FINISHED'
         db.session.add(result)
-        db.session.commit()
+        db.session.commit()'''
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -38,7 +39,7 @@ def website():
             task = Tasks(address=address, timestamp=datetime.now(), task_status='NOT_STARTED')
             db.session.add(task)
             db.session.commit()
-            parse_website_text.delay(task._id)
+            count_words.delay(task._id)
             return redirect('/')
         error = "Form was not validated"
         return render_template('error.html', form=website_form, error=error)

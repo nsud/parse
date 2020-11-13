@@ -10,5 +10,4 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 db = SQLAlchemy(app)
 
-celery = Celery(app.name, broker=os.getenv('CELERY_BROKER_URL'))
-celery.conf.update(app.config)
+
