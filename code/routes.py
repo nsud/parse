@@ -1,7 +1,7 @@
 import requests
 from datetime import datetime, timedelta
 from flask import jsonify, render_template, request, redirect, flash
-from app import db, celery, app
+from app import db, app
 from models import Results, Tasks
 from forms import WebsiteForm
 from worker import count_words
