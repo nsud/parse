@@ -1,8 +1,7 @@
-from datetime import datetime
 from flask_wtf import FlaskForm
 from wtforms import StringField
-from wtforms.validators import DataRequired
+from wtforms.validators import URL
 
 
 class WebsiteForm(FlaskForm):
-    address = StringField('address', validators=[DataRequired()])
+    address = StringField('address', validators=[URL()])
