@@ -13,17 +13,13 @@ def website():
     website_form = WebsiteForm()
     if request.method == 'POST':
         if website_form.validate_on_submit():
-            try:
-                address = request.form.get('address', timeout=10)
-                task = Tasks(address=address, timestamp=datetime.now(), task_status='NOT_STARTED')
-                db.session.add(task)
-                db.session.commit()
-                count_words.delay(task._id)
-                return redirect('/')
-            except Exception as e:
-                error = 'Invalid URL'
-        else:
-            error = "Form was not validated"
+            address = request.form.get('address')
+            task = Tasks(address=address, timestamp=datetime.now(), task_status='NOT_STARTED')
+            db.session.add(task)
+            db.session.commit()
+            count_words.delay(task._id)
+            return redirect('/')
+        error = "Form was not validated"
         return render_template('error.html', form=website_form, error=error)
     return render_template('add.html', form=website_form)
 
